@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 import "hardhat/console.sol";
 
-contract MFTMarket is ReentrancyGuard {
+contract NFTMarket is ReentrancyGuard {
     using Counters for Counters.Counter;
     Counters.Counter private _itemIds;
     Counters.Counter private _itemsSold;
@@ -20,7 +20,7 @@ contract MFTMarket is ReentrancyGuard {
 
     struct MarketItem {
         uint itemId;
-        address mftContract;
+        address nftContract;
         uint256 tokenId;
         address payable seller;
         address payable owner;
@@ -30,7 +30,7 @@ contract MFTMarket is ReentrancyGuard {
 
     mapping(uint256 => MarketItem) private idToMarketItem;
 
-    event MarketItemCreated {
+    event MarketItemCreated (
         uint indexed itemId,
         address indexed nftContract,
         uint256 indexed tokenId,
@@ -38,7 +38,7 @@ contract MFTMarket is ReentrancyGuard {
         address owner,
         uint256 price,
         bool sold 
-    }
+    );
 
     function getListingPrice() public view returns (uint256){
         return listingPrice;
@@ -51,7 +51,6 @@ contract MFTMarket is ReentrancyGuard {
     ) public payable nonReentrant {
         require(price > 0, "Price must be at least 1 wei");
         require(msg.value == listingPrice, "Price must be equal to listing price");
-
         _itemIds.increment();
         uint256 itemId = _itemIds.current();
 
@@ -89,9 +88,9 @@ contract MFTMarket is ReentrancyGuard {
     ) public payable nonReentrant {
         uint price = idToMarketItem[itemId].price;
         uint tokenId = idToMarketItem[itemId].tokenId;
-        require(msg.value == price, "Please submitt the asking price in order to complete the purchase");
+        require(msg.value == price, "Please submit the asking price in order to complete the purchase");
 
-        idToMarketItem[itemId].seller.transer(msg.value);
+        idToMarketItem[itemId].seller.transfer(msg.value);
         IERC721(nftContract).transferFrom(address(this), msg.sender, tokenId);
         idToMarketItem[itemId].owner = payable(msg.sender);
         idToMarketItem[itemId].sold = true;
@@ -100,7 +99,7 @@ contract MFTMarket is ReentrancyGuard {
     }
 
     /* Returns all unsold market items */
-    function fetchMarketItems() public view returns (MarketItem[] memory)
+    function fetchMarketItems() public view returns (MarketItem[] memory){
         uint itemCount = _itemIds.current();
         uint unsoldItemCount = _itemIds.current() - _itemsSold.current();
         uint currentIndex = 0;
@@ -110,12 +109,12 @@ contract MFTMarket is ReentrancyGuard {
             if(idToMarketItem[i + 1].owner == address(0)){
                 uint currentId = i + 1;
                 MarketItem storage currentItem = idToMarketItem[currentId];
-                items[currentItem] = currentItem;
+                items[currentIndex] = currentItem;
                 currentIndex += 1;
             }
         }
         return items;
-
+    }
 
     /* Returns only items that a user has purchased */
     function fetchMyNFTs() public view returns (MarketItem[] memory) {
@@ -125,6 +124,30 @@ contract MFTMarket is ReentrancyGuard {
 
         for(uint i = 0; i < totalItemCount; i++){
             if(idToMarketItem[i + 1].owner == msg.sender){
+                itemCount += 1;
+            }
+        }
+
+        MarketItem[] memory items = new MarketItem[](itemCount);
+        for(uint i = 0; i < totalItemCount; i++){
+            if(idToMarketItem[i + 1].seller == msg.sender){
+                uint currentId = i + 1;
+                MarketItem storage currentItem = idToMarketItem[currentId];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            }
+        }
+
+        return items;
+    }
+
+    function fetchItemsCreated() public view returns (MarketItem[] memory) {
+        uint totalItemCount = _itemIds.current();
+        uint itemCount = 0;
+        uint currentIndex = 0;
+
+        for(uint i = 0; i < totalItemCount; i++){
+            if(idToMarketItem[i + 1].seller == msg.sender){
                 itemCount += 1;
             }
         }
