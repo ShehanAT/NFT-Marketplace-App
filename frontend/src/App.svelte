@@ -1,10 +1,30 @@
 <script>
 	export let name;
+	import Home from './Home.svelte';
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<div>
+      <nav className="border-b p-6">
+        <p className="text-4xl font-bold">Metaverse Marketplace</p>
+        <div className="flex mt-4">
+            <a class="mr-4 text-pink-500" href="/">
+              Home
+            </a>
+            <a class="mr-6 text-pink-500" href="/create-item">
+              Sell Digital Asset
+            </a>
+            <a class="mr-6 text-pink-500" href="/my-assets">
+              My Digital Assets
+            </a>
+            <a class="mr-6 text-pink-500" href="/creator-dashboard">
+              Creator Dashboard
+            </a>
+        </div>
+      </nav>
+    </div>
+
+	<Home></Home>
 </main>
 
 <style>
