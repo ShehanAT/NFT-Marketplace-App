@@ -1,6 +1,7 @@
 <script>
 	export let name;
 	import Home from './Home.svelte';
+	import Navbar from './Navbar.svelte';
 </script>
 
 <main>
@@ -23,8 +24,9 @@
         </div>
       </nav>
     </div>
-
+	<Navbar></Navbar>
 	<Home></Home>
+	<CreateNft></CreateNft>
 </main>
 
 <style>
