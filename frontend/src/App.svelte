@@ -1,19 +1,19 @@
 <script>
-	export let name;
 	import Home from './Home.svelte';
 	import Navbar from './Navbar.svelte';
 </script>
 
 <main>
 	<div>
-      <nav className="border-b p-6">
-        <p className="text-4xl font-bold">Metaverse Marketplace</p>
-        <div className="flex mt-4">
+      <nav class="border-b p-6">
+        <p class="text-4xl font-bold">Metaverse Marketplaces</p>
+		<p class="text-4xl font-bold">Masdfasdf</p>
+        <div class="flex mt-4">
             <a class="mr-4 text-pink-500" href="/">
               Home
             </a>
             <a class="mr-6 text-pink-500" href="/create-item">
-              Sell Digital Asset
+              Sell Digital Assets
             </a>
             <a class="mr-6 text-pink-500" href="/my-assets">
               My Digital Assets
@@ -24,9 +24,9 @@
         </div>
       </nav>
     </div>
-	<Navbar></Navbar>
-	<Home></Home>
-	<CreateNft></CreateNft>
+	<!-- <Navbar />
+	<Home />
+	<CreateNft /> -->
 </main>
 
 <style>
@@ -35,13 +35,6 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
 	}
 
 	@media (min-width: 640px) {

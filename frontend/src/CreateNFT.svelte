@@ -3,7 +3,6 @@
     let formDataDescription = "";
     let formDataPrice = "";
 
-
     async function createNFT(event) {
         event.preventDefault();
         const { title, description } = formData;
