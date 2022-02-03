@@ -17,10 +17,6 @@
             data.append("img", selectedFile);
             console.log("selected file: " + selectedFile);
         }
-
-        // try {
-        //     const totalSupply = await artTokenC
-        // }
     }
 
 </script>

@@ -1,7 +1,4 @@
 <script>
-    // import { ethers } from 'ethers';
-    // import Web3Modal from 'web3modal';
-
     import { 
         nftmarketaddress, nftaddress
     } from '../config.js';
@@ -16,10 +13,6 @@
         // const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider)
         // const data = await marketContract.fetchMarketItems()
     }
-
-    // function buyNft(nft){
-
-    // }
 
 </script>
 

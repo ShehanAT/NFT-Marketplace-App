@@ -1,13 +1,13 @@
 <script>
 	import Home from './Home.svelte';
 	import Navbar from './Navbar.svelte';
+  import CreateNft from './CreateNFT.svelte';
 </script>
 
 <main>
 	<div>
       <nav class="border-b p-6">
-        <p class="text-4xl font-bold">Metaverse Marketplaces</p>
-		<p class="text-4xl font-bold">Masdfasdf</p>
+        <p class="text-4xl font-bold">Metaverse Marketplace</p>
         <div class="flex mt-4">
             <a class="mr-4 text-pink-500" href="/">
               Home
@@ -22,11 +22,12 @@
               Creator Dashboard
             </a>
         </div>
+        <Navbar />
+        <Home />
+        <CreateNft />
       </nav>
     </div>
-	<!-- <Navbar />
-	<Home />
-	<CreateNft /> -->
+
 </main>
 
 <style>
