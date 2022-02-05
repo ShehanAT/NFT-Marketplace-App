@@ -9,12 +9,12 @@ import { terser } from "rollup-plugin-terser";
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-  input: "src/main.js",
+  input: "main.js",
   output: {
     sourcemap: true,
     format: "iife",
     name: "app",
-    file: "public/bundle.js"
+    file: "public/bundle/bundle.js"
   },
   plugins: [
     svelte({
@@ -35,11 +35,48 @@ export default {
     resolve(),
     commonjs(),
 
+    !production && serve(),
+
+    !production && livereload("public"),
+
     // If we're building for production (npm run build
     // instead of npm run dev), minify
     production && terser()
+
   ],
+  client: {
+    watch: {
+      chokidar: {
+        usePolling: true
+      }
+    }
+  },
+  server: {
+    watch: {
+      chokidar: {
+        usePolling: true 
+      }
+    }
+  },
   watch: {
-	  clearScreen: true // whether or not to clear the screen when a rebuild is triggered 
+	  clearScreen: false, // whether or not to clear the screen when a rebuild is triggered 
+    chokidar: false
   }
 };
+
+function serve(){
+  let started = false;
+
+  return {
+    writeBundle() {
+      if(!started){
+        started = true;
+
+        require("child_process").spawn("npm", ["run", "start", "--", "--dev"], {
+          stdio: ["ignore", "inherit", "inherit"],
+          shell: true 
+        })
+      }
+    }
+  }
+}
