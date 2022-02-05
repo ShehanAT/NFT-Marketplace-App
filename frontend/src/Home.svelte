@@ -1,19 +1,55 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore.js">
-    // import * as $j from "jquery";
+
     import jQuery from "jquery";
-    // $ = require("jquery");
-    const _ = require("lodash");
-    // jQuery(function($) {
+    import getWeb3 from "./utils/getWeb3";
+    import _ from "lodash";
+    import { onMount } from "svelte";
     let nfts = [];
     let loadingState = "not-loaded";
   
-    // async function loadNTFs(){
-    // const provider = new ethers.providers.JsonRpcProvider()
-    // const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
-    // const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider)
-    // const data = await marketContract.fetchMarketItems()
-    // }
-  
+ 
+    onMount(async () => {
+      let itemsList = [];
+      const init = async() => {
+        try {
+          // const web3 = await getWeb3();
+          console.log("web3 invocation!")
+          // const accounts = await web3.eth.getAccounts();
+
+        //   if(typeof accounts == undefined){
+        //     alert("Please login with Metamask!");
+        //     console.log("Please login to MetaMask");
+        //   }
+
+        //   const networkId = await web3.eth.net.getId();
+        //   try {
+        //     const artTokenContract = new web3.eth.Contract(
+        //       ArtToken.abi,
+        //       ArtToken.networks[networkId].address 
+        //     );
+
+        //     const marketplaceContract = new web3.eth.Contract(
+        //       ArtMarketplace.abi,
+        //       ArtMarketplace.networks[networkId].address
+        //     );
+
+        //   }catch(error){
+        //     console.error("Error", error);
+        //     alert("Contracts not deployed to the current network " + networkId.toString());
+        //   }
+
+        }
+        catch(error){
+          // alert(`Failed to load web3, accounts or contract. More details: ` + error);
+          // console.error(error);
+          console.log(error);
+        }
+
+      }
+
+    });
+
+
     jQuery(document).ready(function() {
       /*=====DUMMY JSON ARRAY======*/
   
