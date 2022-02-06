@@ -8,13 +8,14 @@
     "rollup-plugin-node-resolve": "^4.2.3",
     "rollup-plugin-svelte": "^6.1.1",
     "rollup-plugin-terser": "^4.0.4",
-    "sirv-cli": "^0.3.1"
+    "sirv-cli": "^0.3.1",
+    "svelte-web3": "^3.3.4"
   },
   "dependencies": {
     "@rollup/plugin-json": "^4.1.0",
     "jquery": "3.6.0",
     "lodash": "4.17.21",
-    "svelte": "^3.32.3",
+    "svelte": "^3.39.0",
     "underscore": "1.13.2",
     "web3": "^1.7.0",
     "web3-eth-contract": "^1.7.0",

@@ -1,9 +1,47 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore.js">
 
     import jQuery from "jquery";
-    import getWeb3 from "./utils/getWeb3";
+    // import getWeb3 from "./utils/getWeb3"; // importing this library causes 'util$4 not defined' error
     import _ from "lodash";
     import { onMount } from "svelte";
+import Web3 from "web3";
+    import {
+      defaultEvmStores,
+      web3,
+      selectedAccount,
+      connected,
+      chainId,
+      chainData
+    } from 'svelte-web3';
+
+    import DAI from "./utils/contract-stores";
+
+    let type;
+    let connectionPending = false;
+    const connect = async() => {
+      connectionPending = true;
+      try {
+        const handler = {
+          Browser: () => defaultEvmStores.setProvider(),
+        }
+        await handler[type]()
+        console.log("$connected", defaultEvmStores.$connected);
+        connectionPending = false;
+
+      }catch(e){
+        console.log(e);
+        connectionPending = false 
+      }
+    
+    }
+
+    const disconnect = async() => {
+      console.log(await $DAI.methods.totalSupply().call())
+
+      await defaultEvmStores.disconnect();
+      connectionPending = false;
+    }
+
     let nfts = [];
     let loadingState = "not-loaded";
   
@@ -12,31 +50,49 @@
       let itemsList = [];
       const init = async() => {
         try {
-          // const web3 = await getWeb3();
-          console.log("web3 invocation!")
+          const provider = new Web3.providers.HttpProvider(
+            "http://127.0.0.1:7545"
+          );
+          // const web3 = new Web3(provider);
+          // console.log("web3 invocation!")
           // const accounts = await web3.eth.getAccounts();
 
-        //   if(typeof accounts == undefined){
-        //     alert("Please login with Metamask!");
-        //     console.log("Please login to MetaMask");
-        //   }
+          // if(typeof accounts == undefined){
+          //   alert("Please login with Metamask!");
+          //   console.log("Please login to MetaMask");
+          // }
 
-        //   const networkId = await web3.eth.net.getId();
-        //   try {
-        //     const artTokenContract = new web3.eth.Contract(
-        //       ArtToken.abi,
-        //       ArtToken.networks[networkId].address 
-        //     );
+          // const networkId = await web3.eth.net.getId();
+          try {
+            const artTokenContract = new web3.eth.Contract(
+              ArtToken.abi,
+              ArtToken.networks[networkId].address 
+            );
 
-        //     const marketplaceContract = new web3.eth.Contract(
-        //       ArtMarketplace.abi,
-        //       ArtMarketplace.networks[networkId].address
-        //     );
+            const marketplaceContract = new web3.eth.Contract(
+              ArtMarketplace.abi,
+              ArtMarketplace.networks[networkId].address
+            );
 
-        //   }catch(error){
-        //     console.error("Error", error);
-        //     alert("Contracts not deployed to the current network " + networkId.toString());
-        //   }
+            const totalSupply = await artTokenContract.methods 
+              .totalSupply()
+              .call();
+            
+            const totalItemsForSale = await marketplaceContract.methods 
+              .totalItemsForSale()
+              .call();
+
+            // for(var tokenId = 1; tokenId <= totalSupply; tokenId++){
+            //   let item = await artTokenContract.methods.Items(tokenId).call();
+            //   let owner = await artTokenContract.methods.ownerOf(tokenId).call();
+
+            //   const response = await api 
+            // }
+
+          }catch(error){
+            console.error("Error", error);
+            alert("Contracts not deployed to the current network " + networkId.toString());
+          }
 
         }
         catch(error){
