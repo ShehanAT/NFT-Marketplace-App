@@ -3,6 +3,7 @@
 
     import { defaultEvmStores, web3, selectedAccount, connected, chainId, chainData } from 'svelte-web3';
     import { missing_component, null_to_empty } from 'svelte/internal';
+import About from './about.svelte';
 
     export let message 
     export let tipAddress 
@@ -60,4 +61,49 @@
 </pre>
 {/if}
 
+{#if $connected}
+<p>
+    Connected chain: chainId = {$chainId}
+</p>
+<p>
+    chainData = {JSON.stringify($chainData)}
+</p>
+<p>
+    Selected account: {$selectedAccount || 'not defined'}
+</p>
+
+<p>
+    {checkAccount} Balance on {$chainData.name} 
+    {#await balance}
+    <span>waiting...</span>
+    {:then value}
+    <span>{value}</span>
+    {/await} {$chainData.nativeCurrency.symbol}
+</p>
+
+{#if false && $selectedAccount}
+    <p><button on:click="{sendTip}">send 0.01 {$chainData.nativeCurrency.symbol} tip to {tipAddress} (author)</button></p>
+{/if}
+
+{/if}
 </main>
+
+<style>
+   main {
+		text-align: center;
+		padding: 1em;
+		max-width: 240px;
+		margin: 0 auto;
+	}
+	h1 {
+		color: #ff3e00;
+		text-transform: uppercase;
+		font-size: 4em;
+		font-weight: 100;
+	}
+	@media (min-width: 640px) {
+		main {
+			max-width: none;
+		}
+	}
+</style>
