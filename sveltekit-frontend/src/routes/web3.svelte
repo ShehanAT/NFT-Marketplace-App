@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
 
-    import { defaultEvmStores, web3, selectedAccount, connected, chainId, chainData } from 'svelte-web3';
+    import { defaultEvmStores, web3, selectedAccount, connected, chainId, chainData, makeContractStore } from 'svelte-web3';
     import { missing_component, null_to_empty } from 'svelte/internal';
 import About from './about.svelte';
     import ArtMarketplace from "../contracts/ArtMarketplace.json";
@@ -10,7 +10,7 @@ import About from './about.svelte';
     export let message 
     export let tipAddress 
 
-    const enable = () => defaultEvmStores.setProvider("https://sokol.poa.network")
+    const enable = () => defaultEvmStores.setProvider("http://127.0.0.1:8545")
     // https://sokol.poa.network
     const enableBrowser = () => defaultEvmStores.setBrowserProvider()
 
@@ -32,17 +32,41 @@ import About from './about.svelte';
 
     const createEthContracts =  async(e) => {
         const networkId = await $web3.eth.net.getId();
-        console.log(ArtMarketplace.networks);
+        // console.log(ArtMarketplace.networks);
+
+        const ethBalance = await $web3.eth.getBalance("0xb921A6d8c8A909Ef991943f01F86Fd70a6606948");
+        console.log(ethBalance);
+        console.log("$connect: ", defaultEvmStores.$connected);
+        console.log("$selectedAccount: ", defaultEvmStores.$web3);
+        console.log("$web3", defaultEvmStores.$web3);
+
+        // const artTokenContract = makeContractStore(ArtToken.abi, "0xb921A6d8c8A909Ef991943f01F86Fd70a6606948")
+        // console.log(artTokenContract);
         const marketplaceContract = new $web3.eth.Contract(
             ArtMarketplace.abi,
-            ArtMarketplace.networks[1337].address 
+            "0xb921A6d8c8A909Ef991943f01F86Fd70a6606948"
+            // ArtMarketplace.networks[1337].address 
         );
-
+        console.log(marketplaceContract);
         const artTokenContract = new $web3.eth.Contract(
             ArtToken.abi,
-            ArtToken.networks[1337].address 
+            "0xb921A6d8c8A909Ef991943f01F86Fd70a6606948"
+            // ArtToken.networks[1337].address 
         );
+        console.log(artTokenContract);
 
+
+        // console.log(marketplaceContract);
+        // console.log(artTokenContract);
+        const totalSupply = await artTokenContract.methods 
+            .totalSupply()
+            .call();
+        const totalItemsForSale = await marketplaceContract.methods 
+            .totalItemsForSale()
+            .call();
+
+        
+        
     }
 
     onMount(
