@@ -8,11 +8,11 @@ import About from './about.svelte';
     export let message 
     export let tipAddress 
 
-    const enable = () => defaultEvmStores.setProvider("http://127.0.0.1:7545")
+    const enable = () => defaultEvmStores.setProvider("https://sokol.poa.network")
     // https://sokol.poa.network
     const enableBrowser = () => defaultEvmStores.setBrowserProvider()
 
-    $: checkAccount = $selectedAccount || '0xb921A6d8c8A909Ef991943f01F86Fd70a6606948';
+    $: checkAccount = $selectedAccount || '0x0000000000000000000000000000000000000000';
     $: balance = $connected ? $web3.eth.getBalance(checkAccount) : ''
 
 
@@ -31,7 +31,7 @@ import About from './about.svelte';
     onMount(
         async() => {
             message = "Connecting to Ethereum Testnet Gorli..."
-            await defaultEvmStores.setProvider("http://127.0.0.1:7545")
+            await defaultEvmStores.setProvider("https://rpc.slock.it/goerli")
             message = ""
         }
     )
