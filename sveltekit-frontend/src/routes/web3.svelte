@@ -4,6 +4,8 @@
     import { defaultEvmStores, web3, selectedAccount, connected, chainId, chainData } from 'svelte-web3';
     import { missing_component, null_to_empty } from 'svelte/internal';
 import About from './about.svelte';
+    import ArtMarketplace from "../contracts/ArtMarketplace.json";
+    import ArtToken from "../contracts/ArtToken.json";
 
     export let message 
     export let tipAddress 
@@ -28,6 +30,21 @@ import About from './about.svelte';
         alert("Thanks!")
     }
 
+    const createEthContracts =  async(e) => {
+        const networkId = await $web3.eth.net.getId();
+        console.log(ArtMarketplace.networks);
+        const marketplaceContract = new $web3.eth.Contract(
+            ArtMarketplace.abi,
+            ArtMarketplace.networks[1337].address 
+        );
+
+        const artTokenContract = new $web3.eth.Contract(
+            ArtToken.abi,
+            ArtToken.networks[1337].address 
+        );
+
+    }
+
     onMount(
         async() => {
             message = "Connecting to Ethereum Testnet Gorli..."
@@ -46,7 +63,6 @@ import About from './about.svelte';
 <p>Visit the <a href="https://web3js.readthedocs.io/en">Web3.js documentation</a> to learn how to use Web3.js library</p>
 
 <p>{message}</p>
-<p>{JSON.stringify($web3)}</p>
 {#if $web3.version}
 <p>
     <button on:click="{enable}">Connect to https://sokol.pageXOffset.network</button>
@@ -81,6 +97,8 @@ import About from './about.svelte';
     <span>{value}</span>
     {/await} {$chainData.nativeCurrency.symbol}
 </p>
+
+<button on:click="{createEthContracts}">Create Eth Contracts</button>
 
 {#if false && $selectedAccount}
     <p><button on:click="{sendTip}">send 0.01 {$chainData.nativeCurrency.symbol} tip to {tipAddress} (author)</button></p>
