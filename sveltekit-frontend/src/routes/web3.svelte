@@ -8,10 +8,11 @@ import About from './about.svelte';
     export let message 
     export let tipAddress 
 
-    const enable = () => defaultEvmStores.setProvider("https://sokol.poa.network")
+    const enable = () => defaultEvmStores.setProvider("http://127.0.0.1:7545")
+    // https://sokol.poa.network
     const enableBrowser = () => defaultEvmStores.setBrowserProvider()
 
-    $: checkAccount = $selectedAccount || '0x0000000000000000000000000000000000000000';
+    $: checkAccount = $selectedAccount || '0xb921A6d8c8A909Ef991943f01F86Fd70a6606948';
     $: balance = $connected ? $web3.eth.getBalance(checkAccount) : ''
 
 
@@ -30,7 +31,7 @@ import About from './about.svelte';
     onMount(
         async() => {
             message = "Connecting to Ethereum Testnet Gorli..."
-            await defaultEvmStores.setProvider("https://rpc.slock.it/goerli")
+            await defaultEvmStores.setProvider("http://127.0.0.1:7545")
             message = ""
         }
     )
@@ -45,7 +46,7 @@ import About from './about.svelte';
 <p>Visit the <a href="https://web3js.readthedocs.io/en">Web3.js documentation</a> to learn how to use Web3.js library</p>
 
 <p>{message}</p>
-
+<p>{JSON.stringify($web3)}</p>
 {#if $web3.version}
 <p>
     <button on:click="{enable}">Connect to https://sokol.pageXOffset.network</button>
