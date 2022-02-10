@@ -61,9 +61,9 @@ import About from './about.svelte';
         const totalSupply = await artTokenContract.methods 
             .totalSupply()
             .call();
-        const totalItemsForSale = await marketplaceContract.methods 
-            .totalItemsForSale()
-            .call();
+        // const totalItemsForSale = await marketplaceContract.methods 
+        //     .totalItemsForSale()
+        //     .call();
 
         
         

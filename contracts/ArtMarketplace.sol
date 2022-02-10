@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 import "./ArtToken.sol";
 
 contract ArtMarketplace {
-    ArtToken private token;
+    ArtToken token;
 
     struct ItemForSale {
         uint256 id;
@@ -79,5 +79,10 @@ contract ArtMarketplace {
 
     function totalItemsForSale() external view returns(uint256){
         return itemsForSale.length;
+    }
+
+    modifier OnlyItemOwner(uint256 tokenId){
+        require(token.ownerOf(tokenId) == msg.sender, "Sender does not own the item");
+        _;
     }
 }
