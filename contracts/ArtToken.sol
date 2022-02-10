@@ -37,12 +37,16 @@ contract ArtToken is ERC721Enumerable {
         return newItemId;
     }
 
-    function tokenURI(uint256) public view override returns (string memory){
-        require(_exists(_tokenIds), "ERC721URIStorage: URI query for nonexistent token");
-        return Items[_tokenIds].uri;
+    function tokenURI(uint256 tokenId) public view override returns (string memory){
+        require(_exists(tokenId), "ERC721URIStorage: URI query for nonexistent token");
+        return Items[tokenId].uri;
     }
 
     function setMarketplace(address market) public {
         marketplace = market;
+    }
+
+    function safeTransferForm(address payable sellerId, address message, uint256 tokenId) public{
+
     }
 }
