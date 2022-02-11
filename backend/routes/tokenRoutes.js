@@ -17,22 +17,22 @@ const tokenRoutes = (app) => {
         res.status(200).json(tokens[tokenID]);
     });
 
-    // app.post("/tokens", upload.single("img"), (req, res) => {
-    //     const { filename } = req.file;
-    //     const { tokenId, name, description } = req.body;
+    app.post("/tokens", upload.single("img"), (req, res) => {
+        const { filename } = req.file;
+        const { tokenId, name, description } = req.body;
 
-    //     tokens[tokenId] = {
-    //         name,
-    //         description,
-    //         image: req.protocol + "://" + req.get("host") + "/images/" + filename 
-    //     };
+        tokens[tokenId] = {
+            name,
+            description,
+            image: req.protocol + "://" + req.get("host") + "/images/" + filename 
+        };
 
-    //     fs.writeFileSync(dbFile, JSON.stringify(tokens));
+        fs.writeFileSync(dbFile, JSON.stringify(tokens));
 
-    //     var fullUrl = req.protocol + "://" + req.get("host") + req.originalUrl + "/" + tokenId;
+        var fullUrl = req.protocol + "://" + req.get("host") + req.originalUrl + "/" + tokenId;
 
-    //     res.status(201).json({ message: fullUrl });
-    // });
+        res.status(201).json({ message: fullUrl });
+    });
 };
 
 module.exports = tokenRoutes;
