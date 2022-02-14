@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -8,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from '@material-ui/core/Button';
 
-import getWeb3 from "../utils/getWeb3";
+import getWeb3 from "../../utils/getWeb3";
 
 
 export default function Home() {
@@ -17,7 +16,7 @@ export default function Home() {
     const nft = useSelector((state) => state.allNft.nft);
     const dispatch = useDispatch();
 
-    useEffect(() => {
+    useEffect(async () => {
         let itemsList = [];
 
         try {
