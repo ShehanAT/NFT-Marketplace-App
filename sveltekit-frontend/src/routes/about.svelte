@@ -12,6 +12,9 @@
 	// since there's no dynamic data here, we can prerender
 	// it so that it gets served as a static asset in prod
 	export const prerender = true;
+
+	// Note that key1 is not the same as key2
+
 </script>
 
 <svelte:head>
