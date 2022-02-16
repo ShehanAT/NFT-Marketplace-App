@@ -13,7 +13,7 @@ import getWeb3 from "../../utils/getWeb3";
 export default function Home() {
 
     // useSelector() allows you to extract data from the Redux store state
-    const nft = useSelector((state) => state.allNft.nft);
+    // const nft = useSelector((state) => state.allNft.nft);
     const dispatch = useDispatch();
 
     useEffect(async () => {
@@ -22,6 +22,7 @@ export default function Home() {
         try {
             const web3 = await getWeb3();
             const account = await web3.eth.getAccounts();
+
 
             
 

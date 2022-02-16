@@ -2,13 +2,12 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../../styles/Home.module.css'
 import Home from "../components/home/index";
-import { Provider } from "react-redux";
-import { store } from "../redux/store";
+
+
 
 
 export default function Index() {
   return (
-    <Provider store={store}>
       <div className={styles.container}>
         <Head>
           <title>Create Next App</title>
@@ -33,6 +32,5 @@ export default function Index() {
           </a>
         </footer>
       </div>
-    </Provider>
   )
 }

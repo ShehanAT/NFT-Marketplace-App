@@ -10,6 +10,7 @@
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@openzeppelin/contracts": "^4.5.0",
+    "@reduxjs/toolkit": "^1.7.2",
     "@truffle/hdwallet-provider": "^2.0.3",
     "@types/chai": "^4.3.0",
     "chai": "^4.3.6",
