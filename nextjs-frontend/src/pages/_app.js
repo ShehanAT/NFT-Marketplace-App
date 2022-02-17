@@ -1,9 +1,16 @@
 import '../../styles/globals.css'
-// import { store } from "../redux/store";
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from 'redux'; 
+import reducers from "../redux/reducers/index";
+import nftReducer from "../redux/reducers/nftReducer";
 
-const store = createStore(() => [], {}, applyMiddleware());
+const store = createStore(
+    reducers
+  // () => 
+  // reducers, 
+  // {}, 
+  // applyMiddleware()
+);
 
 function MyApp({ Component, pageProps }) {
   return (
