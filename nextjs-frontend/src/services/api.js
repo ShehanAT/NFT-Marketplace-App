@@ -1,4 +1,4 @@
-import axios from 'axois';
+import axios from 'axios';
 import process from 'process';
 
 export const api = axios.create({

@@ -1,5 +1,5 @@
 module.exports = {
-    contracts_build_directory: './src/contracts',
+    contracts_build_directory: './nextjs-frontend/src/contracts',
     
     networks: {
         development: {
