@@ -61,7 +61,61 @@ const Home = () => {
                     const totalItemsForSale = await marketplaceContract.methods
                         .totalItemsForSale()
                         .call();
+                    for (var tokenId = 1; tokenId <= totalSupply; tokenId++){
+                        let item = await artTokenContract.methods.Items(tokenId).call();
+                        let owner = await artTokenContract.methods.ownerOf(tokenId).call();
 
+                        const response = await api
+                            .get(`/tokens/${tokenId}`)
+                            .catch((err) => {
+                                console.log("Err: ", err);
+                            });
+                        console.log("response: ", response);
+
+                        itemsList.push({
+                            name: response.data.name,
+                            description: response.data.description,
+                            image: response.data.image,
+                            tokenId: item.id,
+                            creator: item.creator,
+                            owner: owner,
+                            uri: item.uri,
+                            isForSale: false,
+                            saleId: null,
+                            price: 0, 
+                            isSold: null,
+                        });
+                    }
+
+                        if(totalItemsForSale > 0){
+                            for(var saleId = 0; saleId < totalItemsForSale; saleId++){
+                                let item = await marketplaceContract.methods 
+                                    .itemsForSale(saleId)
+                                    .call();
+                                let active = await marketplaceContract.methods 
+                                    .activeItems(item.tokenId)
+                                    .call();
+
+                                let itemListIndex = itemsList.findIndex(
+                                    (i) => i.tokenId === item.tokenId 
+                                );
+
+                                itemsList[itemListIndex] = {
+                                    ...itemsList[itemListIndex],
+                                    isForSale: active,
+                                    saleId: item.id,
+                                    price: item.price,
+                                    isSold: item.isSold
+                                };
+
+                            }
+                        }
+                        // dispatch is the function that is used to trigger state changes in the Redux store
+                        // Note: dispatch is not availabe as props 
+                        dispatch(setAccount(accounts[0])); // these methods are defined as Redux actions methods 
+                        dispatch(setTokenContract(artTokenContract));
+                        dispatch(setMarketContract(marketplaceContract));
+                        dispatch(setNft(itemsList));
                 }catch(error){
                     console.error("error", error);
                 }               
