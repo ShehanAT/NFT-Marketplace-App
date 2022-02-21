@@ -6,8 +6,8 @@ const useStyles = makeStyles({
   },
   images: {
     objectFit: "cover",
-    width: "100%",
-    height: "100%",
+    width: "50px !important",
+    height: "50px !important",
     
   },
   banner: {
