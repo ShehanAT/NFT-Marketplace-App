@@ -19,9 +19,6 @@ export default function Index() {
 
           <main className={styles.main}>
             <Home />
-            <div>
-              Put your NFT Marketplace app here
-            </div>
           </main>
 
           <footer className={styles.footer}>
