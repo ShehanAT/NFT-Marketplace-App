@@ -196,7 +196,7 @@ const Home = () => {
             </Grid>
             </section>
             <section className={classes.allNfts}>
-                <Typography className={classes.title}>Latest artwork</Typography>
+                <h2 style={{ textAlign: "center" }}>Latest artwork</h2>
                 <Grid
                 container
                 direction="row"
@@ -204,11 +204,15 @@ const Home = () => {
                 alignItems="center"
                 spacing={2}
                 >
-                {nftItem.map((nft) => (
-                    <Grid item key={nft.tokenId}>
-                    <Card {...nft} />
-                    </Grid>
-                ))}
+                { nftItem.length ? 
+                    nftItem.map((nft) => (
+                        <Grid item key={nft.tokenId}>
+                        <Card {...nft} />
+                        </Grid>
+                    ))
+                : 
+                    <h3>No artwork found...</h3>
+                }
                 </Grid>
             </section>
         </div>
