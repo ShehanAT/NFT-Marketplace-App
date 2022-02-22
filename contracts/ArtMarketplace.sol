@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import "./ArtToken.sol";
@@ -71,7 +72,7 @@ contract ArtMarketplace {
 
             itemsForSale[id].isSold = true;
             activeItems[itemsForSale[id].tokenId] = false;
-            token.safeTransferForm(itemsForSale[id].seller, msg.sender, itemsForSale[id].tokenId);
+            token.safeTransferFrom(itemsForSale[id].seller, msg.sender, itemsForSale[id].tokenId);
             itemsForSale[id].seller.transfer(msg.value);
 
             emit itemSold(id, msg.sender, itemsForSale[id].price);
