@@ -1,5 +1,6 @@
 const ArtToken = artifacts.require("ArtToken");
 const ArtMarketplace = artifacts.require("ArtMarketplace");
+const NFT = artifacts.require("NFT");
 
 module.exports = async function(deployer) {
   await deployer.deploy(ArtToken);
@@ -11,4 +12,6 @@ module.exports = async function(deployer) {
   const market = await ArtMarketplace.deployed()
 
   await token.setMarketplace(market.address)
+
+  await deployer.deploy(NFT);
 };
