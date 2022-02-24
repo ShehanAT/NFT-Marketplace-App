@@ -55,7 +55,7 @@ const Home = () => {
                     console.log(networkId);
                     console.log(ArtToken.networks[networkId].address);
                     const artTokenContract = new web3.eth.Contract(
-                        ArtToken.abi,
+                        ArtToken.abi,       
                         ArtToken.networks[networkId].address
                     );
 
