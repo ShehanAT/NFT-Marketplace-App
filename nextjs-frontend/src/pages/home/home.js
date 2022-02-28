@@ -1,193 +1,86 @@
 import React, { useEffect, useState } from "react";
-import Grid from "@material-ui/core/Grid";
+import axios from "axios";
 
+import NFT from "../artifacts/contracts/NFT.json";
+import Market from "../artifacts/contracts/ArtMarketplace.json";
 
-import getWeb3 from "../../utils/getWeb3";
-import { api } from "../../services/api";
-
-import ArtMarketplace from "../../contracts/ArtMarketplace.json";
-import ArtToken from "../../contracts/ArtToken.json";
-
-import { useStyles } from "./styles.js";
-
-import Card from "../../components/Card";
-import image1 from "../../assets/images/image1_sm.png";
-import image2 from "../../assets/images/image2_sm.png";
-import image3 from "../../assets/images/image3_sm.png";
-import image4 from "../../assets/images/image4_sm.png";
-import image5 from "../../assets/images/image5_sm.png";
-import image6 from "../../assets/images/image6_sm.png";
-import image7 from "../../assets/images/image7_sm.png";
-import image8 from "../../assets/images/image8_sm.png";
-import image9 from "../../assets/images/image9_sm.png";
+let rpcEndpoint = "https://rpc-mumbai.maticvigil.com";
 
 const Home = () => {
-    const classes = useStyles();
-
-    const [ counter, setCounter ] = useState(0);
-
+    const [nfts, setNfts] = useState([])
+    const [loadingState, setLoadingState] = useState('not-loaded')
     useEffect(() => {
-        let itemsList = [];
-        const init = async () => {
-            try {
-                const web3 = await getWeb3();
-                const accounts = await web3.eth.getAccounts();
-
-                if(typeof accounts == undefined){
-                    alert("Please login with MetaMask!");
-                    console.log("Login to MetaMask");
-                }
-
-                const networkId = await web3.eth.net.getId();
-
-                try {
-                    console.log(ArtToken);
-                    console.log(networkId);
-                    console.log(ArtToken.networks[networkId].address);
-                    const artTokenContract = new web3.eth.Contract(
-                        ArtToken.abi,       
-                        ArtToken.networks[networkId].address
-                    );
-
-                    const marketplaceContract = new web3.eth.Contract(
-                        ArtMarketplace.abi,
-                        ArtMarketplace.networks[networkId].address
-                    )
-                    
-                    // RUNNING INTO 'RETURN VALUES AREN'T VALID, DID IT RUN OUT OF GAS?' error 
-                    const totalSupply = await artTokenContract.methods
-                        .totalSupply()
-                        .call();
-                    console.log(totalSupply);
-                    const totalItemsForSale = await marketplaceContract.methods
-                        .totalItemsForSale()
-                        .call();
-                    console.log(totalItemsForSale);
-                    for (var tokenId = 1; tokenId <= totalSupply; tokenId++){
-                        let item = await artTokenContract.methods.Items(tokenId).call();
-                        let owner = await artTokenContract.methods.ownerOf(tokenId).call();
-
-                        const response = await api
-                            .get(`/tokens/${tokenId}`)
-                            .catch((err) => {
-                                console.log("Err: ", err);
-                            });
-                        console.log("response: ", response);
-
-                        itemsList.push({
-                            name: response.data.name,
-                            description: response.data.description,
-                            image: response.data.image,
-                            tokenId: item.id,
-                            creator: item.creator,
-                            owner: owner,
-                            uri: item.uri,
-                            isForSale: false,
-                            saleId: null,
-                            price: 0, 
-                            isSold: null,
-                        });
-                    }
-
-                        if(totalItemsForSale > 0){
-                            for(var saleId = 0; saleId < totalItemsForSale; saleId++){
-                                let item = await marketplaceContract.methods 
-                                    .itemsForSale(saleId)
-                                    .call();
-                                let active = await marketplaceContract.methods 
-                                    .activeItems(item.tokenId)
-                                    .call();
-
-                                let itemListIndex = itemsList.findIndex(
-                                    (i) => i.tokenId === item.tokenId 
-                                );
-
-                                itemsList[itemListIndex] = {
-                                    ...itemsList[itemListIndex],
-                                    isForSale: active,
-                                    saleId: item.id,
-                                    price: item.price,
-                                    isSold: item.isSold
-                                };
-
-                            }
-                        }
-                }catch(error){
-                    console.error("error", error);
-                }               
-            }catch(error){
-                console.error(error);
-            }
-        };
-        init();
+        loadNFTs()
     }, []);
 
-    const handleOnClick = () => {
-        init();
-        setCounter(counter + 1);
+    async function loadNFTs() {
+        const provider = new ethers.providers.JsonRpcProvider(rpcEndpoint)
+        const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
+        const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, provider)
+        
+        const data = await marketContract.fetchMarketItems() 
+
+        const items = await Promise.all(data.map(async i => {
+            const tokenUri = await tokenContract.tokenURI(i.tokenId)
+            const meta = await axios.get(tokenUri)
+            let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
+            let item = {
+                price,
+                itemId: i.itemId.toNumber(),
+                seller: i.seller,
+                owner: i.owner,
+                image: meta.data.image,
+                name: meta.data.name,
+                description: meta.data.description,
+            }
+            return item 
+        }))
+        setNfts(items)
+        setLoadingState('Done')
     }
 
+    async function buyNft(nft){
+        const web3Modal = new Web3Modal()
+        const connection = await web3Modal.connect()
+        const provider = new ethers.providers.Web3Provider(connection)
+        const signer = provider.getSigner()
+        const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
+
+        const price = ethers.utils.parseUnit(nft.price.toString(), 'ether')
+        const transaction = await contract.createMarketSale(nftaddress, nft.itemId, {
+            value: price
+        })
+        await transaction.wait()
+        loadNFTs()
+    }
+
+    if(loadingState === 'Done' && !nfts.length) return (<h1 className="px-20 py10 text-3xl">No items in marketplace</h1>)
     return (
-        <div className={classes.homepage}>
-            <h1 style={{ textAlign: "center" }}>NFT Marketplace</h1>
-            <section className={classes.banner}>
-            <Grid container spacing={0} className={classes.gridBanner}>
-                <Grid item={true} xs={3}>
-                    <Grid container spacing={0}>
-                    <Grid item xs={8}>
-                        <img src={image1.src} alt="dreaming" className={classes.images} />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <img src={image2.src} alt="veterans" className={classes.images} />
-                    </Grid>
-                    <Grid item xs={7}>
-                        <img src={image3.src} alt="modeling3d" className={classes.images} />
-                    </Grid>
-                    <Grid item xs={5}>
-                        <img src={image4.src} alt="lionKing" className={classes.images} />
-                    </Grid>
-                    </Grid>
-                </Grid>
-                <Grid item xs={6} className={classes.main}>
-                    <img src={image9.src} alt="galerie" />
-                    <h2>A decentralized NFT marketplace where you can expose your art</h2>
-                    {/* <Link href="/create-nft">
-                    <Button variant="contained" color="primary" disableElevation>
-                        Mint your art
-                    </Button>
-                    </Link>  */}
-                </Grid>
-                <Grid item xs={3}>
-                    <Grid container spacing={0}>
-                    <Grid item xs={8}>
-                        <img src={image5.src} alt="dreaming" className={classes.images} />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <img src={image6.src} alt="veterans" className={classes.images} />
-                    </Grid>
-                    <Grid item xs={7}>
-                        <img src={image7.src} alt="modeling3d" className={classes.images} />
-                    </Grid>
-                    <Grid item xs={5}>
-                        <img src={image8.src} alt="lionKing" className={classes.images} />
-                    </Grid>
-                    </Grid>
-                </Grid>
-            </Grid>
-            </section>
-            <section className={classes.allNfts}>
-                <h2 style={{ textAlign: "center" }}>Latest artwork</h2>
-                {/* <Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                spacing={2}
-                >
-                </Grid> */}
-            </section>
+        <div className="flex justify-center">
+            <div className="px-4" style={{ maxWidth: '1600px' }}>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+                    {
+                        nfts.map((nft, i) => (
+                        <div key={i} className="border shadow rounded-xl overflow-hidden">
+                            {/* <img src={nft.image} /> */}
+                            <Image src={nft.image} width="300px" height="300px"/>
+                            <div className="p-4">
+                            <p style={{ height: '64px' }} className="text-2xl font-semibold">{nft.name}</p>
+                            <div style={{ height: '70px', overflow: 'hidden' }}>
+                                <p className="text-gray-400">{nft.description}</p>
+                            </div>
+                            </div>
+                            <div className="p-4 bg-black">
+                            <p className="text-2xl mb-4 font-bold text-white">{nft.price} ETH</p>
+                            <button className="w-full bg-pink-500 text-white font-bold py-2 px-12 rounded" onClick={() => buyNft(nft)}>Buy</button>
+                            </div>
+                        </div>
+                        ))
+                    }  
+                </div>
+            </div>
         </div>
-    );
+    )
 }
 
 export default Home;
