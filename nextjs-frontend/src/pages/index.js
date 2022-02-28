@@ -2,8 +2,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../../styles/Home.module.css'
 import Home from "../pages/home/home";
-import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter as Router } from 'react-router-dom';
 
 export default function Index() {
 

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "next/link";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Button from '@material-ui/core/Button';
+
 
 import getWeb3 from "../../utils/getWeb3";
 import { api } from "../../services/api";
@@ -13,12 +10,6 @@ import ArtToken from "../../contracts/ArtToken.json";
 
 import { useStyles } from "./styles.js";
 
-import {
-  setNft,
-  setAccount,
-  setTokenContract,
-  setMarketContract,
-} from "../../redux/actions/nftActions";
 import Card from "../../components/Card";
 import image1 from "../../assets/images/image1_sm.png";
 import image2 from "../../assets/images/image2_sm.png";
@@ -32,8 +23,7 @@ import image9 from "../../assets/images/image9_sm.png";
 
 const Home = () => {
     const classes = useStyles();
-    const nft = useSelector((state) => state.allNft.nft);
-    const dispatch = useDispatch();
+
     const [ counter, setCounter ] = useState(0);
 
     useEffect(() => {
@@ -122,12 +112,6 @@ const Home = () => {
 
                             }
                         }
-                    //     // dispatch is the function that is used to trigger state changes in the Redux store
-                    //     // Note: dispatch is not availabe as props 
-                        dispatch(setAccount(accounts[0])); // these methods are defined as Redux actions methods 
-                        dispatch(setTokenContract(artTokenContract));
-                        dispatch(setMarketContract(marketplaceContract));
-                        dispatch(setNft(itemsList));
                 }catch(error){
                     console.error("error", error);
                 }               
@@ -137,10 +121,6 @@ const Home = () => {
         };
         init();
     }, []);
-
-    console.log("Nft :", nft);
-
-    const nftItem = useSelector((state) => state.allNft.nft);
 
     const handleOnClick = () => {
         init();
@@ -197,23 +177,14 @@ const Home = () => {
             </section>
             <section className={classes.allNfts}>
                 <h2 style={{ textAlign: "center" }}>Latest artwork</h2>
-                <Grid
+                {/* <Grid
                 container
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
                 spacing={2}
                 >
-                { nftItem.length ? 
-                    nftItem.map((nft) => (
-                        <Grid item key={nft.tokenId}>
-                        <Card {...nft} />
-                        </Grid>
-                    ))
-                : 
-                    <h3>No artwork found...</h3>
-                }
-                </Grid>
+                </Grid> */}
             </section>
         </div>
     );
