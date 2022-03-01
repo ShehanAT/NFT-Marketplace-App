@@ -1,7 +1,7 @@
-const { createRequire } = require("module");
-
-createRequire("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-waffle");
 const fs = require("fs");
+// const privateKey = fs.readFileSync(".secret").toString().trim() || "01234567890123456789";
+// const POLYGON_ACCOUNT_PRIVATE_KEY = require("./config.js");
 
 module.exports = {
     defaultNetwork: "hardhat",
@@ -9,6 +9,10 @@ module.exports = {
         hardhat: {
             chainId: 1337
         },
+        mumbai: {
+            url: "https://rpc-mumbai.matic.today",
+            accounts: [process.env.POLYGON_ACCOUNT_PRIVATE_KEY]
+        }
 
     },
     solidity: {
