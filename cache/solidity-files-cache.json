@@ -630,8 +630,8 @@
       ]
     },
     "C:\\Users\\sheha\\OneDrive\\Documents\\GitHub\\nft-marketplace-app\\contracts\\Market.sol": {
-      "lastModificationDate": 1645671535225,
-      "contentHash": "6c40d4bb9765c4b98a5960999e01b09a",
+      "lastModificationDate": 1646139723432,
+      "contentHash": "312539bdd711044c652cb92cce595346",
       "sourceName": "contracts/Market.sol",
       "solcConfig": {
         "version": "0.8.4",
