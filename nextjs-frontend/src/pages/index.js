@@ -31,7 +31,6 @@ export default function Index() {
               </span>
             </a>
           </footer>
-        {/* </Router> */}
       </div>
       
   )

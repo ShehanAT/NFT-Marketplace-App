@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }) {
               Sell Digital Asset
             </a>
           </Link>
-          <Link href="/my-assets">
+          <Link href="/myAssets">
             <a className="mr-6 text-pink-500">
               My Digital Assets
             </a>

@@ -5,11 +5,13 @@ import { create as ipfsHttpClient } from 'ipfs-http-client'
 import NFT from "../../../../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "../../../../artifacts/contracts/Market.sol/NFTMarket.json";
 import Image from 'next/image';
+
 let rpcEndpoint = "https://rpc-mumbai.maticvigil.com";
+import Web3Modal from "web3modal"
 
 import {
     nftaddress, nftmarketaddress
-  } from '../../../../nftConfig';
+} from '../../../../nftConfig';
 
 const Home = () => {
     const [nfts, setNfts] = useState([])
@@ -51,7 +53,7 @@ const Home = () => {
         const signer = provider.getSigner()
         const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
 
-        const price = ethers.utils.parseUnit(nft.price.toString(), 'ether')
+        const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')
         const transaction = await contract.createMarketSale(nftaddress, nft.itemId, {
             value: price
         })
