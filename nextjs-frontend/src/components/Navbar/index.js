@@ -12,7 +12,7 @@ const Navbar = () => (
                 {!isDarkTheme ? (
                     <div className={styles.navBarContainerLight}>
                     <img
-                        src="https://assets.ccbp.in/frontend/react-js/website-logo-light-theme-img.png"
+                        src="https://cdn0.iconfinder.com/data/icons/non-fungible-token/512/NFT-Blockchain-crypto-02-1024.png"
                         className={styles.websiteLogo}
                         alt="website logo"
                     />
@@ -40,7 +40,7 @@ const Navbar = () => (
                         onClick={toggleTheme}
                     >
                         <img
-                        src="https://assets.ccbp.in/frontend/react-js/dark-theme-img.png"
+                        src="https://cdn0.iconfinder.com/data/icons/non-fungible-token/512/NFT-Blockchain-crypto-12-1024.png"
                         className={styles.themeImg}
                         alt="theme"
                         />
