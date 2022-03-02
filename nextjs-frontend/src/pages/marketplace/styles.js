@@ -10,15 +10,6 @@ const useStyles = makeStyles({
     height: "50px !important",
     
   },
-  banner: {
-    // minHeight: "50vh",
-    // maxHeight: "50vh",
-    // marginBottom: "3rem"
-  },
-  gridBanner: {
-    // margin: 0,
-    // width: '100%',
-  },
   main: {
     backgroundColor: "white",
     display: "flex",

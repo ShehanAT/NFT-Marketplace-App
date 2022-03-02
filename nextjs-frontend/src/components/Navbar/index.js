@@ -19,7 +19,7 @@ const Navbar = () => (
                     <ul className={styles.middleItems}>
                         <li className={styles.listItem}>
                         <Link href="/" className={styles.linkLight}>
-                            Home
+                            Marketplace
                         </Link>
                         </li>
                         <li className={styles.listItem}>

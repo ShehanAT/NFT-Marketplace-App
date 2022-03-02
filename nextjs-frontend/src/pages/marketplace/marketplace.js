@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ethers } from 'ethers'
-import { create as ipfsHttpClient } from 'ipfs-http-client'
 import NFT from "../../../../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "../../../../artifacts/contracts/Market.sol/NFTMarket.json";
 import Image from 'next/image';
@@ -13,7 +12,7 @@ import {
     nftaddress, nftmarketaddress
 } from '../../../../nftConfig';
 
-const Home = () => {
+const Marketplace = () => {
     const [nfts, setNfts] = useState([])
     const [loadingState, setLoadingState] = useState('not-loaded')
     useEffect(() => {
@@ -64,12 +63,12 @@ const Home = () => {
     if(loadingState === 'Done' && !nfts.length) return (<h1 className="px-20 py10 text-3xl">No items in marketplace</h1>)
     return (
         <div className="flex justify-center">
+            
             <div className="px-4" style={{ maxWidth: '1600px' }}>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
                     {
                         nfts.map((nft, i) => (
                         <div key={i} className="border shadow rounded-xl overflow-hidden">
-                            {/* <img src={nft.image} /> */}
                             <Image src={nft.image} width="300px" height="300px"/>
                             <div className="p-4">
                             <p style={{ height: '64px' }} className="text-2xl font-semibold">{nft.name}</p>
@@ -90,4 +89,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default Marketplace;
