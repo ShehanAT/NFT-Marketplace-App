@@ -17,7 +17,7 @@ import Market from "../../../artifacts/contracts/Market.sol/NFTMarket.json";
 
 export default function CreateItem() {
     const [fileUrl, setFileUrl] = useState(null)
-    const [formInput, updateFormInput] = useState({ price: '', name: '', description: ''});
+    const [formInput, updateFormInput] = useState({ price: '', name: '', description: '', category: ''});
     const router = useRouter()
 
     async function onChange(e){
@@ -37,14 +37,16 @@ export default function CreateItem() {
     }
 
     async function createMarket() {
-        const { name, description, price } = formInput 
-        if(!name || !description || !price || !fileUrl) return 
+        const { name, description, price, category } = formInput 
+        if(!name || !description || !price || !fileUrl || !category) return 
         const data = JSON.stringify({
-            name, description, image: fileUrl
+            name, description, image: fileUrl, category
         })
         try {
             const added = await client.add(data)
             const url = `https://ipfs.infura.io/ipfs/${added.path}`
+            console.log("Infura Url: ");
+            console.log(url);
             createSale(url)
         }catch(error){
             console.log('Error uploading file: ', error)
@@ -79,6 +81,7 @@ export default function CreateItem() {
         router.push('/')
     }
 
+
     return (
 
         <div className={styles.container}>
@@ -87,10 +90,6 @@ export default function CreateItem() {
             </div>
             <div className="flex justify-center">
                 <div className="w-1/2 flex flex-col pb-12">
-                    <p>{formInput.name}</p>
-                    <p>{formInput.description}</p>
-                    <p>{formInput.price}</p>
-                    <br></br>
                     <input 
                     placeholder="Asset Name"
                     className="mt-8 border rounded p-4"
@@ -106,12 +105,24 @@ export default function CreateItem() {
                     className="mt-2 border rounded p-4"
                     onChange={e => updateFormInput({ ...formInput, price: e.target.value })}
                     />
+                    <select 
+                    className="mt-2 border rounded p-4" 
+                    onChange={e => updateFormInput({ ...formInput, category: e.target.value })}
+                    >
+                        <option value="" defaultValue={true} >Select NFT category</option>
+                        <option value="Animals">Animals</option>
+                        <option value="Clothes">Clothes</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Music">Music</option>
+                        <option value="Art">Art</option>
+                    </select>
                     <input
                     type="file"
                     name="Asset"
                     className="my-4"
                     onChange={onChange}
                     />
+
                     {
                     fileUrl && (
                         <Image className="rounded mt-4" width="350" height="350" src={fileUrl} />
