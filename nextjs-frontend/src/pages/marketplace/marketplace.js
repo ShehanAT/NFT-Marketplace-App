@@ -15,6 +15,7 @@ import {
 const Marketplace = () => {
     const [nfts, setNfts] = useState([])
     const [loadingState, setLoadingState] = useState('not-loaded')
+    
     useEffect(() => {
         loadNFTs()
     }, []);
@@ -38,6 +39,7 @@ const Marketplace = () => {
                 image: meta.data.image,
                 name: meta.data.name,
                 description: meta.data.description,
+                category: meta.data.category
             }
             return item 
         }))
@@ -89,7 +91,6 @@ const Marketplace = () => {
                                     </div>
                                 }else{
                                     return <div> 
-                                    <p className="text-gray-400">{JSON.stringify(nft)}</p>
                                     <div key={i} className="border shadow rounded-xl overflow-hidden">
                                         <Image src={nft.image} width="300px" height="300px"/>
                                         <div className="p-4">
