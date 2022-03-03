@@ -81,29 +81,32 @@ const Marketplace = () => {
             <div className="flex justify-center">
                 <h3>NFTS FOR SALE</h3>
             </div>
+           
             <div className="flex justify-center">
-                
-                <div className="px-4" style={{ maxWidth: '1600px' }}>
-                    <div className="grid grid-cols-1">
-                        <Box sx={{ minWidth: 120 }}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                                <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={selectedNftCategory}
-                                label="Select NFT Category"
-                                onChange={(e) => {setSelectedNftCategory(e.target.value);}}
-                                >
-                                    <MenuItem value="All" defaultValue={true} >All</MenuItem>
-                                    {
-                                        NFTCategories.map((key) => { 
-                                            return <MenuItem value={key}>{key}</MenuItem>
-                                        })
-                                    }
-                                </Select>
-                            </FormControl>
-                        </Box>
+                {/* style={{ maxWidth: '1600px' }} */}
+                <div className="px-4" >
+                    <div className="flex justify-left">
+                        <div className="grid grid-cols-4 flex justify-right">
+                            <Box sx={{ minWidth: 120 }}>
+                                <FormControl fullWidth>
+                                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                                    <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={selectedNftCategory}
+                                    label="Select NFT Category"
+                                    onChange={(e) => {setSelectedNftCategory(e.target.value);}}
+                                    >
+                                        <MenuItem value="All" defaultValue={true} >All</MenuItem>
+                                        {
+                                            NFTCategories.map((key) => { 
+                                                return <MenuItem value={key}>{key}</MenuItem>
+                                            })
+                                        }
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </div>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
                         {
@@ -148,30 +151,30 @@ const Marketplace = () => {
                             })
                             : 
                             nfts.map((nft, i) => {
-                                console.log(selectedNftCategory);
-                                (nft.category && nft.category == selectedNftCategory) 
-                                ? 
-                                <div key={i} className="border shadow rounded-xl overflow-hidden">
-                                    <Image src={nft.image} width="300px" height="300px"/>
-                                    <div className="p-4">
-                                        <p style={{ height: '64px' }} className="text-2xl font-semibold">{nft.name}</p>
-                                        <div style={{ height: '70px', overflow: 'hidden' }}>
-                                            <p className="text-gray-400">{nft.description}</p>
-                                            <p className="text-gray-400">Category {nft.category}</p>
+                                if(nft.category && nft.category == selectedNftCategory){
+                                    return <div key={i} className="border shadow rounded-xl overflow-hidden">
+                                        <Image src={nft.image} width="300px" height="300px"/>
+                                        <div className="p-4">
+                                            <p style={{ height: '64px' }} className="text-2xl font-semibold">{nft.name}</p>
+                                            <div style={{ height: '70px', overflow: 'hidden' }}>
+                                                <p className="text-gray-400">{nft.description}</p>
+                                                <p className="text-gray-400">Category {nft.category}</p>
+                                            </div>
+                                        </div>
+                                        <div className="p-4 bg-black">
+                                            <p className="text-2xl mb-4 font-bold text-white">{nft.price} ETH</p>
+                                            <button className="w-full bg-blue-500 text-white font-bold py-2 px-12 rounded" onClick={() => buyNft(nft)}>Buy</button>
                                         </div>
                                     </div>
-                                    <div className="p-4 bg-black">
-                                        <p className="text-2xl mb-4 font-bold text-white">{nft.price} ETH</p>
-                                        <button className="w-full bg-blue-500 text-white font-bold py-2 px-12 rounded" onClick={() => buyNft(nft)}>Buy</button>
-                                    </div>
-                                </div>
-                                :
-                                <div></div>  
+                                }
+                                // return <div className="flex justify-center"><h1>No Items Found...</h1></div>  
                             })
+                            
                         }  
                     </div>
                 </div>
             </div>
+          
         </>
     )
 }
