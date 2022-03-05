@@ -10,7 +10,8 @@ module.exports = {
             chainId: 1337
         },
         mumbai: {
-            url: "https://rpc-mumbai.matic.today",
+            // url: "https://rpc-mumbai.matic.today",
+            url: "https://rpc-mumbai.maticvigil.com",
             accounts: [process.env.POLYGON_ACCOUNT_PRIVATE_KEY]
         }
 

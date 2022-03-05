@@ -5,12 +5,26 @@ import { useRouter } from 'next/router';
 import Web3Modal from 'web3modal';
 import Image from 'next/image';
 import styles from '../../styles/Home.module.css'
-
+import ReactTooltip from "react-tooltip";
+import { Watch, Audio } from "react-loader-spinner";
+// import "../../node_modules/bootstrap/dist/css/bootstrap.min.css";
 const client = ipfsHttpClient("https://ipfs.infura.io:5001/api/v0")
-
 import { 
     nftaddress, nftmarketaddress
 } from '../../../nftConfig';
+
+
+const watchLoadingSpinner = {
+    Component: Watch,
+    props: {
+        props: {
+            color: "#000000",
+            height: 100,
+            width: 110
+          },
+          name: "Loading..."
+    }
+}
 
 import NFT from "../../../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "../../../artifacts/contracts/Market.sol/NFTMarket.json";
@@ -18,7 +32,9 @@ import Market from "../../../artifacts/contracts/Market.sol/NFTMarket.json";
 export default function CreateItem() {
     const [fileUrl, setFileUrl] = useState(null)
     const [formInput, updateFormInput] = useState({ price: '', name: '', description: '', category: ''});
+    const [showLoadingSpinner, setLoadingSpinner] = useState(false);
     const router = useRouter()
+
 
     async function onChange(e){
         const file = e.target.files[0]
@@ -47,6 +63,7 @@ export default function CreateItem() {
             const url = `https://ipfs.infura.io/ipfs/${added.path}`
             console.log("Infura Url: ");
             console.log(url);
+            setLoadingSpinner(true)
             createSale(url)
         }catch(error){
             console.log('Error uploading file: ', error)
@@ -128,9 +145,26 @@ export default function CreateItem() {
                         <Image className="rounded mt-4" width="350" height="350" src={fileUrl} />
                     )
                     }
-                    <button onClick={createMarket} className="font-bold mt-4 bg-blue-500 text-white rounded p-4 shadow-lg">
-                    Create Digital Asset
-                    </button>
+                    <div className="grid grid-cols-2">
+                        <button onClick={createMarket} className="font-bold mt-4 bg-blue-500 text-white rounded p-4 shadow-lg">
+                        Create Digital Asset
+                        </button>
+                        {(showLoadingSpinner) ?  
+                            <div className="col-xs-12 col-sm-6 col-md-4 col-lg-2 p-5">
+                                <div
+                                data-tip={watchLoadingSpinner.name}
+                                data-for="happyFace"
+                                key={watchLoadingSpinner.name + 0}
+                                className="loaderBox"
+                                >
+                                <watchLoadingSpinner.Component {...watchLoadingSpinner.props} />
+                                </div>
+                            </div>
+                        :
+                            <div></div>
+                        }
+                    </div>
+                  
                 </div>
             </div>
         </div>

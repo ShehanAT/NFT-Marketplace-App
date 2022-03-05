@@ -14,6 +14,7 @@ contract NFTMarket is ReentrancyGuard {
 
     address payable owner;
     uint256 listingPrice = 0.0245 ether;
+    // uint256 listingPrice = 1 ether;
 
     constructor() {
         owner = payable(msg.sender);
