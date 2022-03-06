@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ethers } from 'ethers'
-import NFT from "../../../../artifacts/contracts/NFT.sol/NFT.json";
 import Market from "../../../../artifacts/contracts/Market.sol/NFTMarket.json";
 import Image from 'next/image';
-
 let rpcEndpoint = "https://rpc-mumbai.maticvigil.com";
 import Web3Modal from "web3modal"
 
@@ -13,7 +11,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-// import NFTCategory from "../../utils/NFT-Category";
+
 
 import {
     nftaddress, nftmarketaddress
@@ -71,10 +69,6 @@ const Marketplace = () => {
         loadNFTs()
     }
 
-    // handleCategoryChange = () => {
-
-    // }
-
     if(loadingState === 'Done' && !nfts.length) return (<h1 className="px-20 py10 text-3xl">No items in marketplace</h1>)
     return (
         <>
@@ -97,10 +91,10 @@ const Marketplace = () => {
                                     label="Select NFT Category"
                                     onChange={(e) => {setSelectedNftCategory(e.target.value);}}
                                     >
-                                        <MenuItem value="All" defaultValue={true} >All</MenuItem>
+                                        <MenuItem value="All" key="99" defaultValue={true} >All</MenuItem>
                                         {
-                                            NFTCategories.map((key) => { 
-                                                return <MenuItem value={key}>{key}</MenuItem>
+                                            NFTCategories.map((key, index) => { 
+                                                return <MenuItem value={key} key={index}>{key}</MenuItem>
                                             })
                                         }
                                     </Select>
