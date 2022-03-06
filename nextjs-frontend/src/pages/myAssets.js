@@ -5,7 +5,7 @@ import Web3Modal from "web3modal"
 import Image from 'next/image';
 import styles from '../../styles/Home.module.css'
 import {
-  nftmarketaddress, nftaddress
+  nftmarketaddress
 } from '../../../nftConfig';
 
 import Market from '../../../artifacts/contracts/Market.sol/NFTMarket.json';
@@ -29,11 +29,11 @@ export default function MyAssets(){
         const signer = provider.getSigner()
 
         const marketContract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
-        const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
         const data = await marketContract.fetchMyNFTs()
 
         const items = await Promise.all(data.map(async i => {
-            const tokenUri = await tokenContract.tokenURI(i.tokenId)
+            const tokenUri = await marketContract.tokenURI(i.tokenId)
+
             const meta = await axios.get(tokenUri)
             let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
             let item = {
