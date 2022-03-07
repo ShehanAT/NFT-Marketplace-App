@@ -35,21 +35,21 @@ export default function CreateItem() {
     const router = useRouter()
 
 
-    async function onChange(e){
-        const file = e.target.files[0]
-        try {
-            const added = await client.add(
-                file, 
-                { 
-                    progress: (prog) => console.log(`received: ${prog}`)
-                }
-            )
-        const url = `https://ipfs.infura.io/ipfs/${added.path}`
-        setFileUrl(url);
-        } catch(error){
-            console.log('Error uploading file: ', error);
-        }
-    }
+    // async function onChange(e){
+    //     const file = e.target.files[0]
+    //     try {
+    //         const added = await client.add(
+    //             file, 
+    //             { 
+    //                 progress: (prog) => console.log(`received: ${prog}`)
+    //             }
+    //         )
+    //     const url = `https://ipfs.infura.io/ipfs/${added.path}`
+    //     setFileUrl(url);
+    //     } catch(error){
+    //         console.log('Error uploading file: ', error);
+    //     }
+    // }
 
     async function createMarket() {
         const { name, description, price, category } = formInput 
@@ -78,21 +78,6 @@ export default function CreateItem() {
         const ethPrice = ethers.utils.parseUnits(formInput.price, "ether");
         let contract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
         let transaction = await contract.createToken(url, ethPrice, { value: ethPrice })
-        // let tx = await transaction.wait() 
-        // let tokenId = null;
-        // let value = null;
-
-        // let event = tx.events[0];
-        // value = event.args[2];
-        // tokenId = value.toNumber();  
-
-        // const price = ethers.utils.parseUnits(formInput.price, "ether")
-
-        // contract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
-        // let listingPrice = await contract.getListingPrice()
-        // listingPrice = listingPrice.toString()
-
-        // transaction = await contract.createMarketItem(nftmarketaddress, tokenId, price, { value: listingPrice })
 
         await transaction.wait() 
         router.push('/')

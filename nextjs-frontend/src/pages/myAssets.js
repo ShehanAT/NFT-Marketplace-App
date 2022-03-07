@@ -48,6 +48,7 @@ export default function MyAssets(){
         setNfts(items)
         setLoadingState('Done')
     }
+    
     if(loadingState === "Done" && !nfts.length) return (<h1 className="py-10 px-20 text-3xl">No assets owned</h1>)
     return (
         <>
