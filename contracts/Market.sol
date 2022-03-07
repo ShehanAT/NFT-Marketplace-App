@@ -32,10 +32,10 @@ contract NFTMarket is ERC721URIStorage {
 
     event MarketItemCreated(
         uint256 indexed tokenId,
-        address seller,
+        address seller, 
         address owner,
         uint256 price,
-        bool sold 
+        bool sold
     );
 
     /* Returns the listing price of the contract */
@@ -44,13 +44,13 @@ contract NFTMarket is ERC721URIStorage {
     }
 
     function createToken(string memory tokenURI, uint256 price) public payable returns (uint){
-        _tokenIds.increment();
-        uint256 newTokenId = _tokenIds.current();
+       _tokenIds.increment();
+       uint256 newTokenId = _tokenIds.current();
 
-        _mint(msg.sender, newTokenId);
-        _setTokenURI(newTokenId, tokenURI);
-        createMarketItem(newTokenId, price);
-        return newTokenId;
+       _mint(msg.sender, newTokenId);
+       _setTokenURI(newTokenId, tokenURI);
+       createMarketItem(newTokenId, price);
+       return newTokenId;
     }
 
     /* Places an item for sale on the marketplace */
@@ -60,26 +60,23 @@ contract NFTMarket is ERC721URIStorage {
     ) private {
         require(price > 0, "Price must be at least 1 wei");
         require(msg.value == listingPrice, "Price must be equal to listing price");
-    
-        // _tokenIds.increment();
-        // uint256 itemId = _tokenIds.current();
 
         idToMarketItem[tokenId] = MarketItem(
             tokenId,
             payable(msg.sender),
             payable(address(this)),
-            price,
+            price, 
             false
         );
-        _transfer(msg.sender, address(this), tokenId);  
-        // IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
+
+        _transfer(msg.sender, address(this), tokenId);
 
         emit MarketItemCreated(
             tokenId,
             msg.sender,
             address(this),
-            price, 
-            false 
+            price,
+            false
         );
     }
 
@@ -89,17 +86,17 @@ contract NFTMarket is ERC721URIStorage {
     function createMarketSale(
         uint256 tokenId
     ) public payable {
-        uint price = idToMarketItem[tokenId].price;
-        address seller = idToMarketItem[tokenId].seller;
-        require(msg.value == price, "Please submit the asking price in order to complete the purchase");
+       uint256 price = idToMarketItem[tokenId].price;
+       address seller = idToMarketItem[tokenId].seller;
+       require(msg.value == price, "Please submit the asking price in order to complete the transaction");
 
-        idToMarketItem[tokenId].owner = payable(msg.sender);
-        idToMarketItem[tokenId].sold = true;
-        idToMarketItem[tokenId].seller = payable(address(0));
-        _itemsSold.increment();
-        _transfer(address(this), msg.sender, tokenId);
+       idToMarketItem[tokenId].owner = payable(msg.sender);
+       idToMarketItem[tokenId].sold = true;
+       idToMarketItem[tokenId].seller = payable(address(this));
+       _itemsSold.increment();
+       _transfer(address(this), msg.sender, tokenId);
         payable(owner).transfer(listingPrice);
-        payable(seller).transfer(msg.value);
+       payable(seller).transfer(msg.value);
     }
 
     /* Returns all unsold market items */
@@ -117,8 +114,8 @@ contract NFTMarket is ERC721URIStorage {
                 currentIndex += 1;
             }
         }
-
         return items;
+
     }
 
     /* Returns only items that a user has purchased */
@@ -127,14 +124,14 @@ contract NFTMarket is ERC721URIStorage {
         uint itemCount = 0;
         uint currentIndex = 0;
 
-        for (uint i = 0; i < totalItemCount; i++){
+        for(uint i = 0; i < totalItemCount; i++){
             if(idToMarketItem[i + 1].owner == msg.sender){
                 itemCount += 1;
             }
         }
 
         MarketItem[] memory items = new MarketItem[](itemCount);
-        for (uint i = 0; i < totalItemCount; i++){
+        for(uint i = 0; i < totalItemCount; i++){
             if(idToMarketItem[i + 1].owner == msg.sender){
                 uint currentId = i + 1;
                 MarketItem storage currentItem = idToMarketItem[currentId];
@@ -144,30 +141,31 @@ contract NFTMarket is ERC721URIStorage {
         }
 
         return items;
+
     }
 
     /* Returns only items a user has created */
     function fetchItemsCreated() public view returns (MarketItem[] memory){
-        uint totalItemCount = _tokenIds.current();
-        uint itemCount = 0;
-        uint currentIndex = 0;
+      uint totalItemCount = _tokenIds.current();
+      uint itemCount = 0;
+      uint currentIndex = 0;
 
-        for(uint i = 0; i < totalItemCount; i++){
-            if(idToMarketItem[i + 1].seller == msg.sender){
-                itemCount += 1;
-            }
-        }
+      for(uint i = 0; i < totalItemCount; i++){
+          if(idToMarketItem[i + 1].seller == msg.sender){
+              itemCount += 1;
+          }
+      }
 
-        MarketItem[] memory items = new MarketItem[](itemCount);
-        for(uint i = 0; i < totalItemCount; i++){
-            if(idToMarketItem[i + 1].seller == msg.sender){
-                uint currentId = i + 1;
-                MarketItem storage currentItem = idToMarketItem[currentId];
-                items[currentIndex] = currentItem;
-                currentIndex += 1;
-            }
-        }
-        return items;
+      MarketItem[] memory items = new MarketItem[](itemCount);
+      for(uint i = 0; i < totalItemCount; i++){
+          if(idToMarketItem[i + 1].seller == msg.sender){
+              uint currentId = i + 1;
+              MarketItem storage currentItem = idToMarketItem[currentId];
+              items[currentIndex] = currentItem;
+              currentIndex += 1;
+          }
+      }
+      return items;
     }
 
 }
