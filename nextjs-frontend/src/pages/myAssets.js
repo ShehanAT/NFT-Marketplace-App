@@ -9,7 +9,6 @@ import {
 } from '../../../nftConfig';
 
 import Market from '../../../artifacts/contracts/Market.sol/NFTMarket.json';
-import NFT from '../../../artifacts/contracts/NFT.sol/NFT.json';
 
 export default function MyAssets(){
     const [nfts, setNfts] = useState([])
