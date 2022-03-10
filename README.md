@@ -1,4 +1,4 @@
-## NFT Marketplace built with Next.js, Polygon, Solidity, IPFA and Hardhat
+## NFT Marketplace built with Next.js, Polygon, Solidity, TailwindCSS and Hardhat
 
 ### Overview 
 This is a simple project designed to gain experience building decentralized applications. 
